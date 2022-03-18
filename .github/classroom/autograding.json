@@ -1,0 +1,84 @@
+{
+  "tests": [
+    {
+      "name": "1. BinarySearchTree constructor",
+      "setup": "",
+      "run": "ctest -VVV --output-on-failure --test-dir build -R \"BinarySearchTree::BinarySearchTree\"",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 5,
+      "points": 1
+    },
+    {
+      "name": "2. BinarySearchTree::Insert",
+      "setup": "",
+      "run": "ctest -VVV --output-on-failure --test-dir build -R \"BinarySearchTree::Insert\"",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 5,
+      "points": 1
+    },
+    {
+      "name": "3. BinarySearchTree::Find",
+      "setup": "",
+      "run": "ctest -VVV --output-on-failure --test-dir build -R \"BinarySearchTree::Find\"",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 5,
+      "points": 1
+    },
+    {
+      "name": "4. BinarySearchTree::Contains",
+      "setup": "",
+      "run": "ctest -VVV --output-on-failure --test-dir build -R \"BinarySearchTree::Contains\"",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 5,
+      "points": 1
+    },
+    {
+      "name": "5. BinarySearchTree::FindMin",
+      "setup": "",
+      "run": "ctest -VVV --output-on-failure --test-dir build -R \"BinarySearchTree::FindMin\"",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 5,
+      "points": 1
+    },
+    {
+      "name": "6. BinarySearchTree::FindMax",
+      "setup": "",
+      "run": "ctest -VVV --output-on-failure --test-dir build -R \"BinarySearchTree::FindMax\"",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 5,
+      "points": 1
+    },
+    {
+      "name": "7. BinarySearchTree::Remove",
+      "setup": "",
+      "run": "ctest -VVV --output-on-failure --test-dir build -R \"BinarySearchTree::Remove\"",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 5,
+      "points": 1
+    },
+    {
+      "name": "8. BinarySearchTree::Clear",
+      "setup": "",
+      "run": "ctest -VVV --output-on-failure --test-dir build -R \"BinarySearchTree::Clear\"",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 5,
+      "points": 1
+    }
+  ]
+}
