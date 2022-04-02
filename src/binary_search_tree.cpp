@@ -7,60 +7,111 @@ namespace assignment {
   }
 
   void BinarySearchTree::Insert(int key, int value) {
-    insert(key, value, root_);
+    Node* new_node = new Node(key, value);
+    if (BinarySearchTree::IsEmpty() == true){
+      root_ = new_node;
+    }else {
+      Node* iter_node = root_;
+      bool flag = true;
+      while (flag == true) {
+        if (key == iter_node->key){
+            iter_node->value = value;
+            flag = false;
+        }else if(key < iter_node->key){
+            if (iter_node->left == nullptr){
+              iter_node->left = new_node;
+              flag = false;
+            }else {
+              iter_node = iter_node->left;
+            }
+        }else if(key > iter_node->key){
+          if (iter_node->right == nullptr){
+            iter_node->right = new_node;
+            flag = false;
+          }else {
+            iter_node = iter_node->right;
+          }
+      }
+    }
+  }
   }
 
   bool BinarySearchTree::Remove(int key) {
-    Node* found_node = find(key, root_);
-    if (found_node == nullptr) {
+    if (root_ == nullptr) {
       return false;
     }
-    remove(key, root_);
-    return true;
+    return remove(key, root_);
   }
 
   void BinarySearchTree::Clear() {
-    clear(root_);
-    root_ = nullptr;
+      if (root_ != nullptr) {
+        clear(root_);
+        root_ = nullptr;
+      }
   }
 
   std::optional<int> BinarySearchTree::Find(int key) const {
-    Node* found_node = find(key, root_);
-    if (found_node == nullptr) {
-      return std::nullopt;
+    Node* iter_node = root_;
+    while (iter_node != nullptr) {
+      if (key == iter_node->key){
+        return iter_node->value;
+      }else if(key < iter_node->key){
+        if (iter_node->left == nullptr){
+          return std::nullopt;
+        }else {
+          iter_node = iter_node->left;
+        }
+      }else if(key > iter_node->key){
+        if (iter_node->right == nullptr){
+          return std::nullopt;
+        }else {
+          iter_node = iter_node->right;
+        }
+      }
     }
-    return found_node->value;
+    return std::nullopt;
   }
 
   bool BinarySearchTree::Contains(int key) const {
-    Node* found_node = find(key, root_);
-    if (found_node == nullptr) {
-      return false;
+    if (Find(key) != std::nullopt){
+      return true;
     }
-    return true;
+    return false;
   }
 
   bool BinarySearchTree::IsEmpty() const {
-    return root_ == nullptr;
+    if (root_ == nullptr){
+      return true;
+    }
+    return false;
   }
 
   std::optional<int> BinarySearchTree::FindMin() const {
-    if (root_ == nullptr) {
-      return std::nullopt;
+    if (IsEmpty() == false){
+      Node* iter_node = root_;
+      while (iter_node != nullptr) {
+        if (iter_node->left != nullptr) {
+          iter_node = iter_node->left;
+        }else{
+          return iter_node->value;
+        }
+      }
     }
-    Node* curr_node = root_;
-    while (curr_node->left != nullptr) {
-      curr_node = curr_node->left;
-    }
-    return curr_node->key;
+    return std::nullopt;
   }
 
   std::optional<int> BinarySearchTree::FindMax() const {
-    if (root_ == nullptr) {
-      return std::nullopt;
+    if (IsEmpty() == false){
+      Node* iter_node = root_;
+      while (iter_node != nullptr) {
+        if (iter_node->right != nullptr) {
+          iter_node = iter_node->right;
+        }else{
+          return iter_node->value;
+        }
+      }
     }
-    Node* found_node = find_max(root_);
-    return found_node->key;
+    return std::nullopt;
   }
 
   Node* BinarySearchTree::root() const {
@@ -70,17 +121,26 @@ namespace assignment {
   // вспомогательные методы
 
   void BinarySearchTree::insert(int key, int value, Node*& node) {
-    if (node != nullptr) {
-      if (key < node->key) {
-        return insert(key, value, node->left);
+    Node* new_node = new Node(key, value);
+    if (node == nullptr){
+      node = new_node;
+    }else {
+      if (key == node->key){
+        node->value = value;
+      }else if(key < node->key){
+        if (node->left == nullptr){
+          node->left = new_node;
+        }else {
+          insert(key, value, node->left);
+        }
+      }else if(key > node->key){
+        if (node->right == nullptr){
+          node->right = new_node;
+        }else {
+          insert(key, value, node->right);
+        }
       }
-      if (key > node->key) {
-        return insert(key, value, node->right);
-      }
-    }
-    else {
-      Node* newNode = new Node(key, value);
-      node = newNode;
+
     }
   }
 
@@ -104,10 +164,80 @@ namespace assignment {
       else{
         node = nullptr;}}
     return node;
+
+    /*if (node == nullptr){
+      return false;
+    }
+    Node* iter_nd = node;
+    while (iter_nd != nullptr){
+      if (iter_nd->key == key){
+        if(iter_nd->right == nullptr and iter_nd->left != nullptr){
+          iter_nd->key = iter_nd->left->key;
+          iter_nd->value = iter_nd->left->value;
+          Node* next = iter_nd->left;
+          if (iter_nd->left->right == nullptr and iter_nd->left->left == nullptr){
+            delete iter_nd->left;
+            iter_nd->left = nullptr;
+            return true;
+          }
+          remove(iter_nd->key, next);
+        }
+        if(iter_nd->right != nullptr and iter_nd->left == nullptr){
+          iter_nd->key = iter_nd->right->key;
+          iter_nd->value = iter_nd->right->value;
+          Node* next = iter_nd->right;
+          if (iter_nd->right->right == nullptr and iter_nd->right->left == nullptr){
+            delete iter_nd->right;
+            iter_nd->right = nullptr;
+            return true;
+          }
+          remove(iter_nd->key, next);
+        }
+        if(iter_nd->right != nullptr and iter_nd->left != nullptr){
+          Node* minim = find_min(iter_nd->right);
+          iter_nd->key = minim->key;
+          iter_nd->value = minim->value;
+          if (iter_nd->right->right == nullptr and iter_nd->right->left == nullptr
+              and iter_nd->right->key == minim->key){
+            delete iter_nd->right;
+            iter_nd->right = nullptr;
+            return true;
+          }else {
+            remove(minim->key, iter_nd->right);
+          }
+        }
+        return true;
+      }
+      else if(key < iter_nd->key){
+        if (iter_nd->left == nullptr){
+          return false;
+        }
+        if (iter_nd->left->right == nullptr and iter_nd->left->left == nullptr
+            and iter_nd->left->key == key){
+          delete iter_nd->left;
+          iter_nd->left = nullptr;
+          return true;
+        }
+        iter_nd = iter_nd->left;
+      }
+      else if(key > iter_nd->key){
+        if (iter_nd->right == nullptr){
+          return false;
+        }
+        if (iter_nd->right->right == nullptr and iter_nd->right->left == nullptr
+            and iter_nd->right->key == key){
+          delete iter_nd->right;
+          iter_nd->right = nullptr;
+          return true;
+        }
+        iter_nd = iter_nd->right;
+      }
+    }
+    return false;*/
   }
 
   void BinarySearchTree::clear(Node* node) {
-    if (node != nullptr) {
+    if (node != nullptr){
       clear(node->left);
       clear(node->right);
       delete node;
@@ -115,32 +245,38 @@ namespace assignment {
   }
 
   Node* BinarySearchTree::find(int key, Node* node) const {
-    if (node == nullptr) {
+    if (node == nullptr){
       return nullptr;
     }
-    if (node->key == key) {
+    if (node->key == key){
       return node;
-    }
-    if (key < node->key) {
+    }else if(key < node->key){
       return find(key, node->left);
-    }
-    if (key > node->key) {
+    }else if(key > node->key){
       return find(key, node->right);
     }
   }
 
   Node* BinarySearchTree::find_min(Node* node) const {
-    while (node->left != nullptr) {
-      node = node->left;
+    if (node == nullptr){
+      return nullptr;
     }
-    return node;
+    if (node->left == nullptr){
+      return node;
+    }else{
+      find_min(node->left);
+    }
   }
 
   Node* BinarySearchTree::find_max(Node* node) const {
-    while (node->right != nullptr) {
-      node = node->right;
+    if (node == nullptr){
+      return nullptr;
     }
-    return node;
+    if (node->right == nullptr){
+      return node;
+    }else{
+      find_min(node->right);
+    }
   }
 
 }  // namespace assignment
